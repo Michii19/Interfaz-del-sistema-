@@ -18,9 +18,9 @@ namespace BaseDeDatos603
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+          private void Form1_Load(object sender, EventArgs e)
         {
-            string connection = "datasource=localhost;port=3306;username=root;password=;database=sofia";
+            string connection = "datasource=localhost;port=3306;username=root;password=;8426pollo=database=escuela";
             string query = "SELECT * FROM user";
             MySqlConnection conectionDatabase = new MySqlConnection(connection);
             MySqlCommand databaseCommand = new MySqlCommand(query, conectionDatabase);
@@ -57,7 +57,7 @@ namespace BaseDeDatos603
         } 
         private void GuardarUsuario()
         {
-            string connection = "datasource=localhost;port=3306;username=root;password=;database=sofia";
+            string connection = "datasource=localhost;port=3306;username=root;password=;database=escuela";
             string query = "INSERT INTO user(`id`, `first_name`, `last_name`, `address`) VALUES (NULL, '" + textBox1.Text + "', '" + textBox3.Text + "', '" + textBox2.Text + "')";
             MySqlConnection conectionDatabase = new MySqlConnection(connection);
             MySqlCommand databaseCommand = new MySqlCommand(query, conectionDatabase);
@@ -168,5 +168,59 @@ namespace BaseDeDatos603
         {
 
         }
-    }
-}
+        private void Buscar ()
+        {
+            string Connect = "datasource=localhost;port=3306;username=root;password=;database=sofia;";
+            string query = "SELECT * FROM test where id= '" + textBox4.Text + "' ";
+            MySqlConnection databaseConnection = new MySqlConnection(Connect);
+            MySqlCommand commandDatabase = new MySqlCommand(query, databaseConnection);
+            commandDatabase.CommandTimeout = 60;
+            MySqlDataReader reader;
+
+            try
+            {
+                databaseConnection.Open();
+                reader = commandDatabase.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    listView1.Items.Clear();
+                    while (reader.Read())
+                    {
+                        string[] row = { reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3) };
+                        var ListViewItems = new ListViewItem(row);
+                        listView1.Items.Add(ListViewItems);
+                    }
+
+                }
+                else
+                {
+                    Console.WriteLine("No se encontro nada");
+                }
+                databaseConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            private void Modificar ()
+        {
+            string connection = "datasource=localhost;port=3306;username=root;password=;database=escuela";
+            string query = "UPDATE `test` SET `first_name`='" + textBox1.Text + "',`last_name`='" + textBox2.Text + "',`address`='" + textBox3.Text + "' WHERE id = '" + textBox4.Text + "' ";//Modificar
+            MySqlConnection conectionDatabase = new MySqlConnection(connection);
+            MySqlCommand databaseCommand = new MySqlCommand(query, conectionDatabase);
+            databaseCommand.CommandTimeout = 60;
+
+            try
+            {
+                conectionDatabase.Open();
+                MySqlDataReader reader1 = databaseCommand.ExecuteReader();
+                MessageBox.Show("Dato modificado exitosamente");
+                conectionDatabase.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message); 
+            }
+
+                private void Eliminar()
